@@ -35,6 +35,10 @@ const ArtCard = ({ item }: ArtCardProps) => {
             className={`w-full h-full object-cover transition-transform duration-500 ${
               isHovered ? "scale-105" : "scale-100"
             }`}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/placeholder.svg";
+            }}
           />
         </div>
         <CardContent className="p-3">
