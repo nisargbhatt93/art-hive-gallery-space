@@ -1,0 +1,128 @@
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Upload } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+const UploadForm = () => {
+  const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [preview, setPreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Create URL for preview
+      const previewUrl = URL.createObjectURL(file);
+      setPreview(previewUrl);
+    }
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsUploading(true);
+    
+    // Here we would normally handle the actual upload to Supabase
+    // For now we'll just show a loading state and then redirect
+    
+    setTimeout(() => {
+      setIsUploading(false);
+      navigate("/");
+    }, 2000);
+  };
+  
+  return (
+    <Card className="w-full max-w-2xl mx-auto">
+      <CardHeader>
+        <CardTitle>Upload Your Artwork</CardTitle>
+      </CardHeader>
+      <form onSubmit={handleSubmit}>
+        <CardContent className="space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="title" className="text-sm font-medium">Title</label>
+            <Input
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter the title of your artwork"
+              required
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <label htmlFor="description" className="text-sm font-medium">Description</label>
+            <Textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Tell us about your artwork..."
+              className="min-h-32"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <label htmlFor="artwork" className="text-sm font-medium">Artwork Image</label>
+            <div className="border-2 border-dashed rounded-md p-6 text-center cursor-pointer hover:bg-gray-50 transition-colors">
+              {!preview ? (
+                <div className="flex flex-col items-center justify-center space-y-2">
+                  <Upload className="h-8 w-8 text-gray-400" />
+                  <p className="text-sm text-muted-foreground">
+                    Click to upload or drag and drop
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    PNG, JPG or GIF (Max 10MB)
+                  </p>
+                  <Input 
+                    id="artwork" 
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                    required
+                  />
+                </div>
+              ) : (
+                <div className="relative">
+                  <img 
+                    src={preview} 
+                    alt="Preview" 
+                    className="max-h-64 mx-auto rounded-md"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute top-2 right-2"
+                    onClick={() => setPreview(null)}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              )}
+            </div>
+            <Input 
+              id="artwork-visible" 
+              type="file" 
+              accept="image/*" 
+              className={preview ? "hidden" : ""}
+              onChange={handleFileChange}
+            />
+          </div>
+        </CardContent>
+        
+        <CardFooter>
+          <Button type="submit" className="w-full" disabled={isUploading}>
+            {isUploading ? "Uploading..." : "Upload Artwork"}
+          </Button>
+        </CardFooter>
+      </form>
+    </Card>
+  );
+};
+
+export default UploadForm;
