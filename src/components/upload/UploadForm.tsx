@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,34 +5,34 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useArtworkUpload } from "@/hooks/use-artwork-upload";
 
 const UploadForm = () => {
   const navigate = useNavigate();
+  const { uploadArtwork, isUploading } = useArtworkUpload();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Create URL for preview
-      const previewUrl = URL.createObjectURL(file);
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      const previewUrl = URL.createObjectURL(selectedFile);
       setPreview(previewUrl);
     }
   };
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsUploading(true);
     
-    // Here we would normally handle the actual upload to Supabase
-    // For now we'll just show a loading state and then redirect
+    if (!file) return;
     
-    setTimeout(() => {
-      setIsUploading(false);
+    const success = await uploadArtwork(file, title, description);
+    if (success) {
       navigate("/");
-    }, 2000);
+    }
   };
   
   return (
