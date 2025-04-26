@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Upload, Home, ImageIcon, LogOut } from "lucide-react";
+import { Upload, Home, PaletteIcon, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/sonner";
@@ -22,8 +22,8 @@ const Navbar = () => {
     <nav className="border-b py-3 px-4 sm:px-6">
       <div className="container max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
-          <ImageIcon className="h-6 w-6" />
-          <span className="font-semibold text-xl">Art Hive</span>
+          <PaletteIcon className="h-6 w-6" />
+          <span className="font-semibold text-xl">Local Muse</span>
         </Link>
         
         <div className="flex items-center space-x-4">
