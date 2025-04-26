@@ -28,7 +28,7 @@ const Index = () => {
           const formattedArtworks: ArtItem[] = data.map(art => ({
             id: art.id,
             title: art.title,
-            artist: "Artist", // We'll use a placeholder since we don't have artist names yet
+            artist: art.artist_name, // Use the artist_name from the database
             imageUrl: art.image_url,
             description: art.description || "",
             likes: 0,
