@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       artworks: {
         Row: {
+          artist_name: string
           created_at: string | null
           description: string | null
           id: string
@@ -20,6 +21,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          artist_name: string
           created_at?: string | null
           description?: string | null
           id?: string
@@ -29,6 +31,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          artist_name?: string
           created_at?: string | null
           description?: string | null
           id?: string

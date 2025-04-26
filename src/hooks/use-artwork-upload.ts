@@ -9,7 +9,8 @@ export const useArtworkUpload = () => {
   const uploadArtwork = async (
     file: File,
     title: string,
-    description: string
+    description: string,
+    artistName: string
   ) => {
     try {
       setIsUploading(true);
@@ -37,6 +38,7 @@ export const useArtworkUpload = () => {
           title,
           description,
           image_url: publicUrl,
+          artist_name: artistName,
         });
 
       if (insertError) throw insertError;

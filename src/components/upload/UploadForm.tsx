@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +12,7 @@ const UploadForm = () => {
   const navigate = useNavigate();
   const { uploadArtwork, isUploading } = useArtworkUpload();
   const [title, setTitle] = useState("");
+  const [artistName, setArtistName] = useState("");
   const [description, setDescription] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -27,9 +29,9 @@ const UploadForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!file) return;
+    if (!file || !artistName) return;
     
-    const success = await uploadArtwork(file, title, description);
+    const success = await uploadArtwork(file, title, description, artistName);
     if (success) {
       navigate("/");
     }
@@ -49,6 +51,17 @@ const UploadForm = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter the title of your artwork"
+              required
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <label htmlFor="artistName" className="text-sm font-medium">Artist Name</label>
+            <Input
+              id="artistName"
+              value={artistName}
+              onChange={(e) => setArtistName(e.target.value)}
+              placeholder="Enter the artist's name"
               required
             />
           </div>
@@ -97,7 +110,10 @@ const UploadForm = () => {
                     variant="destructive"
                     size="sm"
                     className="absolute top-2 right-2"
-                    onClick={() => setPreview(null)}
+                    onClick={() => {
+                      setPreview(null);
+                      setFile(null);
+                    }}
                   >
                     Remove
                   </Button>
